@@ -1,15 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/javascript.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Domain of Imalilo Draconaloth</title>
+
+    <style>
+      body { margin: 0; }
+      canvas { display: block; }
+    </style>
+    
   </head>
   <body>
     <canvas id="bg"></canvas>
     <div id="app"></div>
-    <script type="module"> src="https://cdn.skypack.dev/three"></script>
-    <script type="module" src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    
+ <script>
+      // Basic setup for Three.js scene
+
+      // Create a scene
+      const scene = new THREE.Scene();
+
+      // Create a camera
+      const camera = new THREE.PerspectiveCamera(
+        75,                   // Field of view
+        window.innerWidth / window.innerHeight, // Aspect ratio
+        0.1,                  // Near clipping plane
+        1000                  // Far clipping plane
+      );
+
+      // Create a WebGL renderer
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Create a geometry and material for a cube
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const cube = new THREE.Mesh(geometry, material);
+
+      // Add the cube to the scene
+      scene.add(cube);
+
+      // Position the camera
+      camera.position.z = 5;
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Rotate the cube for a little animation
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        // Render the scene from the perspective of the camera
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
   </body>
 </html>
