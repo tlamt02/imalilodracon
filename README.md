@@ -1,3 +1,3 @@
-# imalilodracon  <br> 
-Personal project related from domain of Imalilo.Draconaloth <br> 
-picture of the golden and husky are downloaded from free open source unsplash. I hold no credit for the creation of them.
+# ImaliloRacon  <br> 
+Personal project branched from domain of Imalilo.Racon <br> 
+Picture credit: unsplash open-source license. I hold no credit for the creation of them.
