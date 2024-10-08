@@ -17,66 +17,76 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
     
  <script>
-      // Basic setup for Three.js scene
+  // Basic setup for Three.js scene
 
-      // Create a scene
-      const scene = new THREE.Scene();
+  // Create a scene
+  const scene = new THREE.Scene();
 
-      // Create a camera
-      const camera = new THREE.PerspectiveCamera(
-        75,                   // Field of view
-        window.innerWidth / window.innerHeight, // Aspect ratio
-        0.1,                  // Near clipping plane
-        1000                  // Far clipping plane
-      );
-        
-      // Create a WebGL renderer
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+  // Create a camera
+  const camera = new THREE.PerspectiveCamera(
+    75, // Field of view
+    window.innerWidth / window.innerHeight, // Aspect ratio
+    0.1, // Near clipping plane
+    1000 // Far clipping plane
+  );
 
-      // Create a geometry and material for a cube
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const cube = new THREE.Mesh(geometry, material);
+  // Create a WebGL renderer
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-      const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-      const material = new THREE.MeshStandardMaterial({ color: 0xff6347 });
-      const torus = new THREE.Mesh(geometry, material);
+  // Create a geometry and material for a cube
+  const cubeGeometry = new THREE.BoxGeometry();
+  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
-      // Add the cube to the scene
-      scene.add(cube, torus);
+  // Create a geometry and material for a torus
+  const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+  const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xff6347 });
+  const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
-      // Position the camera
-      camera.position.z = 30;
+  // Position the objects next to each other
+  cube.position.x = -15; // Position the cube to the left
+  torus.position.x = 15; // Position the torus to the right
 
-     // Adding a light to the scene
-    const pointLight = new THREE.PointLight(0xffffff);
-    pointLight.position.set(5, 5, 5);
+  // Add the cube and torus to the scene
+  scene.add(cube, torus);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff);
-    scene.add(pointLight, ambientLight);
-      // Animation loop
-      function animate() {
-        requestAnimationFrame(animate);
+  // Position the camera
+  camera.position.z = 50;
 
-        // Rotate the cube for a little animation
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        
-        // Rotate the torus
-        torus.rotation.x += 0.01; // Rotate around the X axis
-        torus.rotation.y += 0.01; // Rotate around the Y axis
+  // Adding a light to the scene
+  const pointLight = new THREE.PointLight(0xffffff);
+  pointLight.position.set(5, 5, 5);
+  const ambientLight = new THREE.AmbientLight(0xffffff);
+  scene.add(pointLight, ambientLight);
 
-        // Optionally, you can animate other properties like position or scale
-        torus.position.x = Math.sin(Date.now() * 0.001) * 10; // Oscillate along the X axis
-        torus.scale.set(Math.sin(Date.now() * 0.1) + 1, Math.sin(Date.now() * 0.001) + 1, Math.sin(Date.now() * 0.001) + 1); // Scale animation
-        
-        // Render the scene from the perspective of the camera
-        renderer.render(scene, camera);
-      };
-  
-      animate();
-    </script>
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotate the cube for animation
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    // Rotate the torus
+    torus.rotation.x += 0.01; // Rotate around the X axis
+    torus.rotation.y += 0.01; // Rotate around the Y axis
+
+    // Oscillate the torus along the X axis and scale it
+    torus.position.x = Math.sin(Date.now() * 0.001) * 10 + 15; // Adjusted for initial position
+    torus.scale.set(
+      Math.sin(Date.now() * 0.1) + 1,
+      Math.sin(Date.now() * 0.1) + 1,
+      Math.sin(Date.now() * 0.1) + 1
+    ); // Scale animation
+
+    // Render the scene from the perspective of the camera
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+
   </body>
 </html>
