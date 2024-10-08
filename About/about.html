@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Domain of Imalilo Draconaloth</title>
 
-    <style>
-      body { margin: 0; }
-      canvas { display: block; }
-    </style>
+    <link rel="stylesheet" href="./style.css">
    
   </head>
   <body>
     
     <canvas id="bg"></canvas>
     <div id="app"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/controls/OrbitControls.js"></script>
+    
      <script>
   // Basic setup for Three.js scene
 
@@ -32,18 +32,22 @@
   );
 
   // Create a WebGL renderer
-  const renderer = new THREE.WebGLRenderer();
+  const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector('#bg'),
+  });
+  renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.render(scene, camera);
   document.body.appendChild(renderer.domElement);
 
   // Create a geometry and material for a cube
-  const cubeGeometry = new THREE.BoxGeometry(10.759, 17.893, 11.107, 4, 4, 5);
-  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x9DE7EF });
+  const cubeGeometry = new THREE.BoxGeometry(10, 17, 11, 4, 4, 5);
+  const cubeMaterial = new THREE.MeshNormalMaterial({ color: 0x9DE7EF });
   const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
   // Create a geometry and material for a torus
-  const torusGeometry = new THREE.TorusGeometry(9.5, 5.0094, 16, 10, 142, 2.9370130209103);
-  const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xff6347 });
+  const torusGeometry = new THREE.TorusGeometry(9, 4, 16, 100, 14, 2);
+  const torusMaterial = new THREE.MeshNormalMaterial({ color: 0xff6347 });
   const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
   // Position the objects next to each other
@@ -62,23 +66,85 @@
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(pointLight, ambientLight);
 
+  const lightHelper = new THREE.PointLightHelper(pointLight)
+  const gridHelper = new THREE.GridHelper(200, 50);
+  scene.add(lightHelper, gridHelper)
+
+//add stars
+function addStar() {
+  const geometry = new THREE.SphereGeometry(1, 20, 26);
+  const material = new THREE.MeshMatcapMaterial({ color: 0x680000 });
+  const star = new THREE.Mesh(geometry, material);
+
+  const [x, y, z] = Array(3)
+    .fill()
+    .map(() => THREE.MathUtils.randFloatSpread(100));
+
+  star.position.set(x, y, z);
+  scene.add(star);
+}
+Array(200).fill().forEach(addStar);
+
+// Background
+const spaceTexture = new THREE.TextureLoader().load('./images/black_neural_something.jpg');
+scene.background = spaceTexture;
+
+// Avatar
+
+const avatarTexture = new THREE.TextureLoader().load('./images/marble-paint-texture-background.png');
+
+const avatar = new THREE.Mesh(new THREE.BoxGeometry(15, 12, 3), new THREE.MeshBasicMaterial({ map: avatarTexture }));
+      avatar.position.set(15, 10, -5);
+      scene.add(avatar);
+
+// Moon
+
+const moonTexture = new THREE.TextureLoader().load('./images/space.jpg');
+      const normalTexture = new THREE.TextureLoader().load('./images/space.jpg');
+      const moon = new THREE.Mesh(
+        new THREE.SphereGeometry(3, 40, 32),
+        new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: normalTexture })
+      );
+      moon.position.set(-10, 0, 30);
+      scene.add(moon);
+
+// Scroll-based camera movement
+function moveCamera() {
+        const t = document.body.getBoundingClientRect().top;
+        moon.rotation.x += 0.05;
+        moon.rotation.y += 0.075;
+        moon.rotation.z += 0.05;
+      }
+
+      document.body.onscroll = moveCamera;
+      moveCamera();
+
   // Animation loop
   function animate() {
-    requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
 
-    // Rotate the cube for animation
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+        // Rotate the cube for animation
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
 
-    // Rotate the torus
-    torus.rotation.x += 0.01; // Rotate around the X axis
-    torus.rotation.y += 0.01; // Rotate around the Y axis
+        // Rotate the avatar for animation
+        avatar.rotation.x += 0.01;
+        avatar.rotation.y += 0.01;
+        
+        // Rotate the torus
+        torus.rotation.x += 0.01;
+        torus.rotation.y += 0.005;
+        torus.rotation.z += 0.01;
+
+        // Rotate the moon
+        moon.rotation.x += 0.005;
+
 
     // Oscillate the torus along the X axis and scale it
     torus.position.x = Math.sin(Date.now() * 0.001) * 10 + 15; // Adjusted for initial position
     torus.scale.set(
-      Math.sin(Date.now() * 0.01) + 1,
-      Math.sin(Date.now() * 0.01) + 1,
+      Math.sin(Date.now() * 0.003) + 1,
+      Math.sin(Date.now() * 0.005) + 1,
       Math.sin(Date.now() * 0.01) + 1
     ); // Scale animation
 
@@ -87,6 +153,13 @@
   }
 
   animate();
+
+        // Resize listener
+        window.addEventListener("resize", () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      });
 </script>
 
   </body>
