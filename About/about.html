@@ -9,23 +9,15 @@
       body { margin: 0; }
       canvas { display: block; }
     </style>
-    <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@<v0.169.0>/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@<v0.169.0>/examples/jsm/"
-    }
-  }
-      
-</script>
-    
+   
   </head>
   <body>
     
     <canvas id="bg"></canvas>
     <div id="app"></div>
-    
- <script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+
+     <script>
   // Basic setup for Three.js scene
 
   // Create a scene
@@ -45,12 +37,12 @@
   document.body.appendChild(renderer.domElement);
 
   // Create a geometry and material for a cube
-  const cubeGeometry = new THREE.BoxGeometry();
-  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const cubeGeometry = new THREE.BoxGeometry(10.759, 17.893, 11.107, 4, 4, 5);
+  const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x9DE7EF });
   const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 
   // Create a geometry and material for a torus
-  const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+  const torusGeometry = new THREE.TorusGeometry(9.5, 5.0094, 16, 10, 142, 2.9370130209103);
   const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xff6347 });
   const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
@@ -85,9 +77,9 @@
     // Oscillate the torus along the X axis and scale it
     torus.position.x = Math.sin(Date.now() * 0.001) * 10 + 15; // Adjusted for initial position
     torus.scale.set(
-      Math.sin(Date.now() * 0.1) + 1,
-      Math.sin(Date.now() * 0.1) + 1,
-      Math.sin(Date.now() * 0.1) + 1
+      Math.sin(Date.now() * 0.01) + 1,
+      Math.sin(Date.now() * 0.01) + 1,
+      Math.sin(Date.now() * 0.01) + 1
     ); // Scale animation
 
     // Render the scene from the perspective of the camera
